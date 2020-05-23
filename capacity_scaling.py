@@ -25,8 +25,6 @@ def find_augmenting_path(G, s, t, phase):
         # scan forward arcs out of i with capacity >= phase
         for j in G.successors(i):
              if j not in marked and j not in LIST and G[i][j]['u'] - G[i][j]['x'] >= phase:
-                  #delta = min(delta, G.edge[i][j]['u'] - G.edge[i][j]['x'])
-                  #G.edge[i][j]['x'] = G.edge[i][j]['x']  + delta
                   pred[j] = i
                   LIST.append(j)
 
@@ -35,9 +33,7 @@ def find_augmenting_path(G, s, t, phase):
              if j not in marked and j not in LIST and G[j][i]['x'] >= phase:
                   pred[j] = i
                   LIST.append(j)
-                  #delta = min(delta, G.edge[j][i]['u'] - G.edge[j][i]['x'])
-                  #G.edge[i][j]['x'] = G.edge[i][j]['x']  - delta
-        
+                 
         LIST.pop(0) 
         marked.add(i)
 
