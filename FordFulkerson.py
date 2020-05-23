@@ -1,6 +1,9 @@
+#ford fulkerson implentation
+
 import networkx as nx
 import csv
 
+#read data into graph structure
 def read_into_graph(inputfile) :   
      with open(inputfile) as f:
         data = [list(map(int,row)) for row in csv.reader(f, delimiter = ',')]
@@ -18,14 +21,12 @@ def find_augmenting_path(G, s, t):
     pred = {}
     pred[s] = 0
     LIST = [s]
-    delta = float('inf')
     while LIST:
         i = LIST[0]
         # scan forward arcs out of i
         for j in G.successors(i):
              if j not in marked and j not in LIST and G[i][j]['u'] - G[i][j]['x'] > 0:
-                  #delta = min(delta, G.edge[i][j]['u'] - G.edge[i][j]['x'])
-                  #G.edge[i][j]['x'] = G.edge[i][j]['x']  + delta
+                
                   pred[j] = i
                   LIST.append(j)
 
@@ -34,12 +35,11 @@ def find_augmenting_path(G, s, t):
              if j not in marked and j not in LIST and G[j][i]['x'] > 0:
                   pred[j] = i
                   LIST.append(j)
-                  #delta = min(delta, G.edge[j][i]['u'] - G.edge[j][i]['x'])
-                  #G.edge[i][j]['x'] = G.edge[i][j]['x']  - delta
+            
         
         LIST.pop(0) 
         marked.add(i)
-
+#find Delta
     if t not in marked :
         P = marked
         Delta = 0
@@ -57,11 +57,11 @@ def find_augmenting_path(G, s, t):
                 r = G[prev][cur]['x']
             Delta = min(Delta, r)                    
         P.reverse()
-    print(P)
     return [Delta, P]                
                     
 def max_flow(G,s,t):
-    # G is a directed graph with s,t nodes in G. Each arc in G has an attribute G[i][j]['u'] indicating its capacity and may have an attribute G[i][j]['x'] indicating its current flow
+    """G is a directed graph with s,t nodes in G. Each arc in G has an attribute G[i][j]['u'] 
+    indicating its capacity and may have an attribute G[i][j]['x'] indicating its current flow"""
 
     for (i,j) in G.edges():
         try :
@@ -86,8 +86,7 @@ def max_flow(G,s,t):
                     
                else:
                     G[P[j+1]][P[j]]['x'] = G[P[j+1]][P[j]]['x']  - Delta
-                    print('backward')
-        
+                
           updated = True
     
     return G, P            
@@ -100,4 +99,3 @@ def max_flow(G,s,t):
 #G2[1][4]['u'] = 6
 #G2[4][5]['u'] = 3
 
-#print(max_flow(G2,1,6))
